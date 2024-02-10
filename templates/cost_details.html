@@ -1,0 +1,22 @@
+<!-- cost_details.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" style="background-image: 'sjsu.jpg'" content="width=device-width, initial-scale=1.0">
+    <title>{{ course_name }} Cost Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Add any necessary stylesheets or meta tags here -->
+</head>
+
+<body class='bg'>
+    <div class="content" style="color: white;">
+        <h1>{{ course_name }} Cost Details</h1>
+        <p>Cost: ${{ cost }}</p>
+    </div>
+    <!-- You can add more HTML to enhance the display if needed -->
+
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>University Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body class="bg">
+    <div class="content">
+        <div class="navbar">
+            <a href="#" onclick="showTab('coursesTab')">Home</a>
+            <a href="#" onclick="showTab('costsTab')">Prices</a>
+            <a href="#" onclick="showTab('contactForm')">Contact Us</a>
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='sjsu_logo.png') }}" alt="SJSU Logo">
+            </div>
+        </div>
+
+        <div id="coursesTab" class="tab">
+            <h1>Available Courses</h1>
+            <table>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Duration</th>
+                </tr>
+                {% for course, details in courses.items() %}
+                <tr onclick="fetchCourseDetails('{{ course }}')">
+                    <td>{{ course }}</td>
+                    <td>{{ details.duration }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+
+        <div id="costsTab" class="tab" style="display:none;">
+            <h1>Course Prices</h1>
+            <select id="courseSelect" class="dropdown" onchange="fetchCost()">
+                <option>Select a course</option>
+                {% for course in courses.keys() %}
+                <option value="{{ course }}">{{ course }}</option>
+                {% endfor %}
+            </select>
+            <p id="costResult" class="costprice"></p>
+        </div>
+
+        <div id="contactForm" class="tab" style="display:none;">
+            <h2>Contact Us</h2>
+            <div class="contact-form-container">
+                <form method="post" action="{{ url_for('contact_us') }}" class="contact-form">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" required></textarea>
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabName).style.display = 'block';
+        }
+
+        function fetchCourseDetails(courseName) {
+            // Construct the URL for the course details page
+            const courseDetailsURL = `/course_details/${encodeURIComponent(courseName)}`;
+
+            // Redirect to the course details page
+            window.location.href = courseDetailsURL;
+        }
+
+        function fetchCost() {
+            // Get the selected course name from the dropdown
+            const dropdown = document.getElementById('courseSelect');
+            const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+            if (selectedOption) {
+                const courseName = selectedOption.value;
+
+                // Redirect to the cost details page
+                window.location.href = `/cost/${encodeURIComponent(courseName)}`;
+            } else {
+                console.error('No course selected.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('coursesTab'); // Show courses tab by default
+        });
+    </script>
+
+</body>
+
+</html>
